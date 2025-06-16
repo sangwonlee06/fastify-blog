@@ -1,6 +1,18 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { createUserHandler } from './user.controller';
-import { createUserSchema, createUserResponseSchema } from './user.schema';
+import {
+  createUserHandler,
+  getUserByEmailHandler,
+  getUserByIdHandler,
+  getUsersHandler,
+} from './user.controller';
+import {
+  createUserSchema,
+  createUserResponseSchema,
+  getUsersResponseSchema,
+  getUserByIdParamsSchema,
+  getUserResponseSchema,
+  getUserByEmailParamsSchema,
+} from './user.schema';
 
 const userRoutes: FastifyPluginAsync = async (fastify, opts) => {
   fastify.post(
@@ -12,6 +24,38 @@ const userRoutes: FastifyPluginAsync = async (fastify, opts) => {
       },
     },
     createUserHandler,
+  );
+
+  fastify.get(
+    '/:id',
+    {
+      schema: {
+        params: getUserByIdParamsSchema,
+        response: { 200: getUserResponseSchema },
+      },
+    },
+    getUserByIdHandler,
+  );
+
+  fastify.get(
+    '/by-email/:email',
+    {
+      schema: {
+        params: getUserByEmailParamsSchema,
+        response: { 200: getUserResponseSchema },
+      },
+    },
+    getUserByEmailHandler,
+  );
+
+  fastify.get(
+    '/',
+    {
+      schema: {
+        response: { 200: getUsersResponseSchema },
+      },
+    },
+    getUsersHandler,
   );
 };
 

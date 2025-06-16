@@ -23,7 +23,21 @@ pnpm-debug.log*
 
 # Env files
 /.env
-.env.*      # e.g. .env.local, .env.test
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# keep env.example committed
+!.env.example
+
+# Prisma
+# ignore the generated client in node_modules
+/node_modules/.prisma/
+/prisma/client/
+/.prisma/
+
+# Ignore generated directory
+/generated/
 
 # TypeScript
 *.tsbuildinfo
@@ -31,20 +45,13 @@ pnpm-debug.log*
 # Optional npm cache directory
 .npm/
 
-# WebStorm
+# IDE / OS files
 /.idea/
-
-# OS files
+/.vscode/
 .DS_Store
 Thumbs.db
-
-# VSCode
-/.vscode/
 
 # Optional lockfiles (uncomment if you DO NOT want to commit these)
 /package-lock.json
 /yarn.lock
 /pnpm-lock.yaml
-/src/generated/prisma
-
-/src/generated/prisma

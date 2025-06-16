@@ -1,6 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { CreateUserInput } from './user.schema';
-import { createUser } from './user.service';
+import {
+  CreateUserInput,
+  GetUserByEmailParams,
+  GetUserByIdParams,
+  GetUserResponse,
+  GetUsersResponse,
+} from './user.schema';
+import { createUser, getUserByEmail, getUserById, getUsers } from './user.service';
 
 export const createUserHandler = async (
   request: FastifyRequest<{ Body: CreateUserInput }>,
@@ -16,4 +22,30 @@ export const createUserHandler = async (
       error,
     });
   }
+};
+
+export const getUserByIdHandler = async (
+  request: FastifyRequest<{ Params: GetUserByIdParams }>,
+  reply: FastifyReply,
+): Promise<GetUserResponse | void> => {
+  const user = await getUserById(request.params.id);
+  if (!user) {
+    return reply.status(404).send({ message: 'User not found' });
+  }
+  return reply.send(user);
+};
+
+export const getUserByEmailHandler = async (
+  request: FastifyRequest<{ Params: GetUserByEmailParams }>,
+  reply: FastifyReply,
+): Promise<GetUserResponse | void> => {
+  const user = await getUserByEmail(request.params.email);
+  if (!user) {
+    return reply.status(404).send({ message: 'User not found' });
+  }
+  return reply.send(user);
+};
+
+export const getUsersHandler = async (): Promise<GetUsersResponse> => {
+  return getUsers();
 };

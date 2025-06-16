@@ -5,6 +5,10 @@ import userRoutes from './modules/user/user.route';
 
 const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
+// app.addHook('onRoute', (opts) => {
+//   app.log.info(`Route registered: ${opts.method} ${opts.url}`);
+// });
+
 // — Zod for request/response validation
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
