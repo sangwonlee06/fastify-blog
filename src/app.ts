@@ -1,19 +1,18 @@
-import Fastify from 'fastify'
-import { validatorCompiler, serializerCompiler, ZodTypeProvider } from 'fastify-type-provider-zod'
+import Fastify from 'fastify';
+import { validatorCompiler, serializerCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
 import prismaPlugin from './plugins/prisma.plugin';
+import userRoutes from './modules/user/user.route';
 
-const app = Fastify({ logger: true })
-  .withTypeProvider<ZodTypeProvider>()
+const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
 // — Zod for request/response validation
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
 // — Core plugins
 app.register(prismaPlugin);
 
-
 // — Feature routes
+app.register(userRoutes, { prefix: '/api/users' });
 
-
-export default app
+export default app;
