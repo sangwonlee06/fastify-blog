@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+/**
+ * Core user fields used in multiple schemas
+ */
 export const userCore = {
   email: z
     .string({ required_error: 'Email is required', invalid_type_error: 'Email is not valid' })
@@ -7,6 +10,9 @@ export const userCore = {
   name: z.string().min(1, 'Name cannot be empty'),
 };
 
+/**
+ * Schema for creating a user (request body)
+ */
 export const createUserSchema = z.object({
   ...userCore,
   password: z
@@ -15,23 +21,50 @@ export const createUserSchema = z.object({
     .max(100, 'Password too long'),
 });
 
+/**
+ * Schema for the user object returned after creation
+ * (omits password)
+ */
 export const createUserResponseSchema = z.object({
   id: z.number(),
   ...userCore,
 });
 
+/**
+ * Querystring schema for GET /users?email=…&name=…&id=…
+ */
+export const getUsersQuerySchema = z.object({
+  id: z.coerce.number().int().optional(),
+  email: userCore.email.optional(),
+  name: z.string().optional(),
+});
+
+/**
+ * Params schema for GET /users/:id
+ */
 export const getUserByIdParamsSchema = z.object({
   id: z.coerce.number().int(),
 });
 
+/**
+ * Params schema for GET /users/by-email/:email
+ */
 export const getUserByEmailParamsSchema = z.object({
   email: userCore.email,
 });
 
+/**
+ * Single‐user response schema (reuse createUserResponseSchema)
+ */
 export const getUserResponseSchema = createUserResponseSchema;
+
+/**
+ * Array‐of‐users response schema
+ */
 export const getUsersResponseSchema = z.array(createUserResponseSchema);
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
+export type GetUsersQuery = z.infer<typeof getUsersQuerySchema>;
 export type GetUserByIdParams = z.infer<typeof getUserByIdParamsSchema>;
 export type GetUserByEmailParams = z.infer<typeof getUserByEmailParamsSchema>;
 export type GetUserResponse = z.infer<typeof getUserResponseSchema>;

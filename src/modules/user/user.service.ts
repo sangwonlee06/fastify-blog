@@ -26,7 +26,18 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
   return prisma.user.findUnique({ where: { email } });
 };
 
-export const getUsers = async (): Promise<User[]> => {
-  const users = await prisma.user.findMany({});
-  return users;
+export interface UserFilter {
+  id?: number;
+  email?: string;
+  name?: string;
+}
+
+export const getUsers = async (filter: UserFilter = {}): Promise<User[]> => {
+  return prisma.user.findMany({
+    where: {
+      id: filter.id,
+      email: filter.email,
+      name: filter.name,
+    },
+  });
 };

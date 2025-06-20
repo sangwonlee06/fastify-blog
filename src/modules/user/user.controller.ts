@@ -4,6 +4,7 @@ import {
   GetUserByEmailParams,
   GetUserByIdParams,
   GetUserResponse,
+  GetUsersQuery,
   GetUsersResponse,
 } from './user.schema';
 import { createUser, getUserByEmail, getUserById, getUsers } from './user.service';
@@ -46,6 +47,10 @@ export const getUserByEmailHandler = async (
   return reply.send(user);
 };
 
-export const getUsersHandler = async (): Promise<GetUsersResponse> => {
-  return getUsers();
+export const getUsersHandler = async (
+  request: FastifyRequest<{ Querystring: GetUsersQuery }>,
+  reply: FastifyReply,
+): Promise<GetUsersResponse> => {
+  const users = await getUsers(request.query);
+  return reply.code(200).send(users);
 };

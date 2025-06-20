@@ -12,6 +12,7 @@ import {
   getUserByIdParamsSchema,
   getUserResponseSchema,
   getUserByEmailParamsSchema,
+  getUsersQuerySchema,
 } from './user.schema';
 
 const userRoutes: FastifyPluginAsync = async (fastify, opts) => {
@@ -52,6 +53,7 @@ const userRoutes: FastifyPluginAsync = async (fastify, opts) => {
     '/',
     {
       schema: {
+        querystring: getUsersQuerySchema,
         response: { 200: getUsersResponseSchema },
       },
     },
