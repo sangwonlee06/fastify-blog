@@ -1,64 +1,67 @@
 import type { FastifyPluginAsync } from 'fastify';
 import {
   createUserHandler,
-  getUserByEmailHandler,
-  getUserByIdHandler,
   getUsersHandler,
+  getUserByIdHandler,
+  getUserByEmailHandler,
+  updateUserHandler,
+  deleteUserHandler,
 } from './user.controller';
 import {
   createUserSchema,
   createUserResponseSchema,
+  getUsersQuerySchema,
   getUsersResponseSchema,
   getUserByIdParamsSchema,
   getUserResponseSchema,
   getUserByEmailParamsSchema,
-  getUsersQuerySchema,
+  updateUserBodySchema,
+  updateUserResponseSchema,
 } from './user.schema';
 
-const userRoutes: FastifyPluginAsync = async (fastify, opts) => {
+const userRoutes: FastifyPluginAsync = async (fastify) => {
+  // GET /users (with optional ?id,?email,?name filters)
+  fastify.get(
+    '/',
+    { schema: { querystring: getUsersQuerySchema, response: { 200: getUsersResponseSchema } } },
+    getUsersHandler,
+  );
+
+  // GET /users/:id
+  fastify.get(
+    '/:id',
+    { schema: { params: getUserByIdParamsSchema, response: { 200: getUserResponseSchema } } },
+    getUserByIdHandler,
+  );
+
+  // GET /users/by-email/:email
+  fastify.get(
+    '/by-email/:email',
+    { schema: { params: getUserByEmailParamsSchema, response: { 200: getUserResponseSchema } } },
+    getUserByEmailHandler,
+  );
+  // POST /users
   fastify.post(
     '/',
-    {
-      schema: {
-        body: createUserSchema,
-        response: { 201: createUserResponseSchema },
-      },
-    },
+    { schema: { body: createUserSchema, response: { 201: createUserResponseSchema } } },
     createUserHandler,
   );
 
-  fastify.get(
+  // PUT /users/:id
+  fastify.put(
     '/:id',
     {
       schema: {
         params: getUserByIdParamsSchema,
-        response: { 200: getUserResponseSchema },
+        body: updateUserBodySchema,
+        response: { 200: updateUserResponseSchema },
       },
     },
-    getUserByIdHandler,
+    updateUserHandler,
   );
 
-  fastify.get(
-    '/by-email/:email',
-    {
-      schema: {
-        params: getUserByEmailParamsSchema,
-        response: { 200: getUserResponseSchema },
-      },
-    },
-    getUserByEmailHandler,
-  );
-
-  fastify.get(
-    '/',
-    {
-      schema: {
-        querystring: getUsersQuerySchema,
-        response: { 200: getUsersResponseSchema },
-      },
-    },
-    getUsersHandler,
-  );
+  // DELETE /users/:id
+  fastify.delete('/:id', { schema: { params: getUserByIdParamsSchema } }, deleteUserHandler);
 };
 
 export default userRoutes;
