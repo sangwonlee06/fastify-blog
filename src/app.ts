@@ -5,6 +5,7 @@ import userRoutes from './modules/user/user.route';
 import securityPlugin from './plugins/security.plugin';
 import authRoutes from './modules/auth/auth.route';
 import authPlugin from './plugins/auth.plugin';
+import healthPlugin from './plugins/health.plugin';
 
 const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
@@ -20,6 +21,7 @@ app.setSerializerCompiler(serializerCompiler);
 app.register(prismaPlugin);
 app.register(securityPlugin);
 app.register(authPlugin);
+app.register(healthPlugin);
 
 // — Feature routes
 app.register(userRoutes, { prefix: '/api/users' });
