@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
-import { signInHandler } from './auth.controller';
-import { signInSchema, signInResponseSchema } from './auth.schema';
+import { signInHandler, signOutHandler } from './auth.controller';
+import { signInSchema, signInResponseSchema, signOutResponseSchema } from './auth.schema';
 
 const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.post(
@@ -12,6 +12,18 @@ const authRoutes: FastifyPluginAsync = async (fastify) => {
       },
     },
     signInHandler,
+  );
+
+  fastify.post(
+    '/signout',
+    {
+      schema: {
+        response: {
+          200: signOutResponseSchema,
+        },
+      },
+    },
+    signOutHandler,
   );
 };
 

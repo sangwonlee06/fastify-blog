@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import type { SignInInput, SignInResponse } from './auth.schema';
+import type { SignInInput, SignInResponse, SignOutResponse } from './auth.schema';
 import { authenticateUser } from './auth.service';
 
 /**
@@ -26,4 +26,18 @@ export const signInHandler = async (
 
   // Return the access token in the response body
   return reply.send({ accessToken: token });
+};
+
+/**
+ * Clears the access_token cookie and returns a confirmation message.
+ */
+export const signOutHandler = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+): Promise<SignOutResponse> => {
+  // Clear the access token cookie
+  reply.clearCookie('access_token', { path: '/' });
+
+  // Return a 200 OK with a JSON confirmation
+  return reply.code(200).send({ message: 'Signed out successfully' });
 };

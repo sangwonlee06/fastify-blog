@@ -11,5 +11,8 @@ export const signInResponseSchema = z.object({
   accessToken: z.string(),
 });
 
+export const signOutResponseSchema = z.object({ message: z.string() });
+
 export type SignInInput = z.infer<typeof signInSchema>;
 export type SignInResponse = z.infer<typeof signInResponseSchema>;
+export type SignOutResponse = z.infer<typeof signOutResponseSchema>;
