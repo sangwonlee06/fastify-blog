@@ -3,6 +3,8 @@ import { validatorCompiler, serializerCompiler, ZodTypeProvider } from 'fastify-
 import prismaPlugin from './plugins/prisma.plugin';
 import userRoutes from './modules/user/user.route';
 import securityPlugin from './plugins/security.plugin';
+import authRoutes from './modules/auth/auth.route';
+import authPlugin from './plugins/auth.plugin';
 
 const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
@@ -17,8 +19,10 @@ app.setSerializerCompiler(serializerCompiler);
 // — Core plugins
 app.register(prismaPlugin);
 app.register(securityPlugin);
+app.register(authPlugin);
 
 // — Feature routes
 app.register(userRoutes, { prefix: '/api/users' });
+app.register(authRoutes, { prefix: '/api/auth' });
 
 export default app;

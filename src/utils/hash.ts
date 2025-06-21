@@ -1,17 +1,17 @@
 import bcrypt from 'bcrypt';
 
-const SALT_ROUNDS = 12;
+const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '12', 10);
 
-export const hashPassword = async (password: string): Promise<string> => {
-  return bcrypt.hash(password, SALT_ROUNDS);
+/**
+ * Hash a plain-text password using bcrypt.
+ */
+export const hashPassword = async (plain: string): Promise<string> => {
+  return bcrypt.hash(plain, SALT_ROUNDS);
 };
 
-export const verifyPassword = async ({
-  candidatePassword,
-  hash,
-}: {
-  candidatePassword: string;
-  hash: string;
-}): Promise<boolean> => {
-  return bcrypt.compare(candidatePassword, hash);
+/**
+ * Compare a plain-text password against a stored bcrypt hash.
+ */
+export const verifyPassword = async (plain: string, hash: string): Promise<boolean> => {
+  return bcrypt.compare(plain, hash);
 };
