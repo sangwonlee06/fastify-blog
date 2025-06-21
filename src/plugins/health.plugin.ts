@@ -16,4 +16,10 @@ export default fp(async (fastify: FastifyInstance) => {
     await fastify.prisma.$queryRaw`SELECT 1`; // throws if DB is down
     return { status: 'ok', db: 'reachable' };
   });
+
+  //  Redis check
+  fastify.get('/health/redis', async () => {
+    const pong = await fastify.redis.ping(); // returns 'PONG'
+    return { status: 'ok', redis: pong };
+  });
 });

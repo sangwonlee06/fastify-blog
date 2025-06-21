@@ -1,6 +1,6 @@
-// NodeJS “process.env” typing
 import { PrismaClient } from '@prisma/client';
 
+// NodeJS “process.env” typing
 declare namespace NodeJS {
   interface ProcessEnv {
     NODE_ENV: 'development' | 'production' | 'test';

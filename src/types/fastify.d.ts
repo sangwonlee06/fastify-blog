@@ -1,10 +1,12 @@
 import type { JWT } from '@fastify/jwt';
 import type { FastifyCookieOptions } from '@fastify/cookie';
 import type { PrismaClient } from '../lib/prisma';
+import Redis from 'ioredis';
 
 declare module 'fastify' {
   interface FastifyInstance {
     prisma: PrismaClient;
+    redis: Redis;
     authenticate: any;
   }
 

@@ -6,6 +6,7 @@ import securityPlugin from './plugins/security.plugin';
 import authRoutes from './modules/auth/auth.route';
 import authPlugin from './plugins/auth.plugin';
 import healthPlugin from './plugins/health.plugin';
+import redisPlugin from './plugins/redis.plugin';
 
 const app = Fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
@@ -19,6 +20,7 @@ app.setSerializerCompiler(serializerCompiler);
 
 // — Core plugins
 app.register(prismaPlugin);
+app.register(redisPlugin);
 app.register(securityPlugin);
 app.register(authPlugin);
 app.register(healthPlugin);
